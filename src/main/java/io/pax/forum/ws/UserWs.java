@@ -1,14 +1,14 @@
 package io.pax.forum.ws;
 
 import io.pax.forum.dao.UserDao;
+import io.pax.forum.domain.Topic;
 import io.pax.forum.domain.User;
+import io.pax.forum.domain.jdbc.SimpleUser;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,5 +25,37 @@ public class UserWs {
         UserDao dao = new UserDao();
         return dao.listUsers();
     }
+    @GET
+    @Path("{id}") //this is a pathparam
+    public User getUser(@PathParam("id") int userId) throws SQLException {
+        return new UserDao().findUserWithTopics(userId);
+
+
+    }
+    @POST
+    public User createUser(SimpleUser user /* sent topic has no id*/) {
+        String userName = user.getName();
+
+        if (user == null) {
+            throw new NotAcceptableException("406 no user name sent");
+        }
+        if (user.getName().length() < 2) {
+            throw new NotAcceptableException("406 : user name must have at least 2 letters ");
+
+        }
+
+        try {
+            int id = new UserDao().createUser(user.getName());
+
+            List<Topic> topics = new ArrayList<>();
+
+           return new SimpleUser(id,userName,topics);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException("Database error, sorry",500);
+        }
+
+    }
 
 }
+

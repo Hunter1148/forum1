@@ -24,6 +24,11 @@ public class SimpleUser implements User {
         this.name = name;
     }
 
+
+
+    public SimpleUser() {
+    }
+
     @Override
     public int getId() {
         return this.id;
@@ -40,4 +45,8 @@ public class SimpleUser implements User {
     }
     @Override
     public List<Topic> getTopics(){return topics;}
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

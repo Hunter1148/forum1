@@ -38,7 +38,7 @@ public class UserDao {
     }
 
     public int createUser(String name) throws SQLException {
-        String query = "INSERT INTO user (nom) VALUES (?)";
+        String query = "INSERT INTO user (name) VALUES (?)";
         System.out.println(query);
 
         Connection conn = this.connector.getConnection();
