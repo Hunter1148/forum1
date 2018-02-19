@@ -20,6 +20,7 @@ public class SimpleUser implements User {
         this.name = userName;
         this.topics = topics;
         this.comments = comments;
+        //dfdfdf
 
     }
 
