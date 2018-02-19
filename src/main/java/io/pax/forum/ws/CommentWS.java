@@ -30,10 +30,12 @@ public class CommentWS {
     @POST
 /*return future wallet with an id*/
     public SimpleComment createComment(SimpleComment comment /* sent wallet has no id*/) {
-       SimpleUser user = comment.getUser();
+
+
+        User user = comment.getUser();
         Topic topic = comment.getTopic();
 
-        if (user == null ) {
+        if (user == null) {
             throw new NotAcceptableException("406 no user id sent");
         }
         if (comment.getName().length() < 2) {
@@ -43,17 +45,18 @@ public class CommentWS {
 
         try {
 
-            int id = new CommentDao().createComment(user.getId(),topic.getId(),comment.getName());
-            User boundUser = comment.getUser();
+            int id = new CommentDao().createComment(user.getId(), topic.getId(), comment.getName());
+           User boundUser = comment.getUser();
+          Topic boundTopic = comment.getTopic();
 
-            SimpleUser simpleUser = new SimpleUser(boundUser.getId(),boundUser.getName());
+            SimpleUser simpleUser = new SimpleUser(boundUser.getId(), boundUser.getName());
+            SimpleTopic simpleTopic = new SimpleTopic(boundTopic.getId(), boundTopic.getName(), simpleUser);
 
 
-            return new SimpleComment(id, comment.getName(),simpleUser);
+            return new SimpleComment(id, comment.getName(), simpleUser, simpleTopic);
         } catch (SQLException e) {
 
             throw new ServerErrorException("Database error, sorry", 500);
         }
-
     }
-}
+    }

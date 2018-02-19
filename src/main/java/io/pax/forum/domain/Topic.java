@@ -11,7 +11,7 @@ public interface Topic {
 
     int getId();
     default User getUser(){
-        return getUser();}
+        return getUser() ;}
 
     String getName();
     List<? extends Comment> getComments();

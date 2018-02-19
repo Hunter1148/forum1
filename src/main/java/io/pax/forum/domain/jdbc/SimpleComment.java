@@ -75,6 +75,10 @@ public class SimpleComment implements Comment {
 
 
     public SimpleUser getSimpleUser() {
-        return getSimpleUser();
+        return user;
+    }
+
+    public SimpleTopic getSimpleTopic() {
+        return topic;
     }
 }
