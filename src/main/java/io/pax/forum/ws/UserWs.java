@@ -1,6 +1,7 @@
 package io.pax.forum.ws;
 
 import io.pax.forum.dao.UserDao;
+import io.pax.forum.domain.Comment;
 import io.pax.forum.domain.Topic;
 import io.pax.forum.domain.User;
 import io.pax.forum.domain.jdbc.SimpleUser;
@@ -48,8 +49,9 @@ public class UserWs {
             int id = new UserDao().createUser(user.getName());
 
             List<Topic> topics = new ArrayList<>();
+            List<Comment> comments = new ArrayList<>();
 
-           return new SimpleUser(id,userName,topics);
+           return new SimpleUser(id,userName,topics, comments);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServerErrorException("Database error, sorry",500);

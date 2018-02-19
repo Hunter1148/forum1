@@ -1,5 +1,6 @@
 package io.pax.forum.dao;
 
+import io.pax.forum.domain.Comment;
 import io.pax.forum.domain.Topic;
 import io.pax.forum.domain.User;
 import io.pax.forum.domain.jdbc.SimpleTopic;
@@ -65,16 +66,43 @@ public class UserDao {
         statement.setInt(1, userId);
         ResultSet set = statement.executeQuery();
         User user = null;
+        List<Comment> comments = new ArrayList<>();
         List<Topic> topics = new ArrayList<>();
         while (set.next()) {
             String userName = set.getString("u.name");
             System.out.println("userName: " + userName);
-            user = new SimpleUser(userId, userName, topics);
+            user = new SimpleUser(userId, userName, topics, comments);
             int topicId = set.getInt("t.id");
             String topicName = set.getString("t.name");
             if (topicId > 0) {
                 Topic topic = new SimpleTopic(topicId, topicName);
               topics.add(topic);
+            }
+        }
+        set.close();
+        statement.close();
+        System.out.println(user);
+        return user;
+    }
+    public User findUserWithComment (int userId) throws SQLException {
+
+        Connection connection = connector.getConnection();
+        String query = "SELECT * FROM comment c RIGHT JOIN user u ON c.user_id=u.id WHERE u.id =?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, userId);
+        ResultSet set = statement.executeQuery();
+        User user = null;
+        List<Topic> topics = new ArrayList<>();
+        List<Comment> comments = new ArrayList<>();
+        while (set.next()) {
+            String userName = set.getString("c.name");
+            System.out.println("userName: " + userName);
+            user = new SimpleUser(userId, userName,comments);
+            int topicId = set.getInt("t.id");
+            String topicName = set.getString("t.name");
+            if (topicId > 0) {
+                Topic topic = new SimpleTopic(topicId, topicName);
+                topics.add(topic);
             }
         }
         set.close();

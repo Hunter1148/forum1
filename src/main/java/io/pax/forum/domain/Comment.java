@@ -6,10 +6,10 @@ package io.pax.forum.domain;
 public interface Comment {
     int getId();
     default User getUser(){
-        return null;}
+        return getUser();}
 
     default Topic getTopic(){
-        return null;}
+        return getTopic();}
 
     String getName();
 }

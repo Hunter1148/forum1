@@ -9,4 +9,5 @@ public interface User {
     int getId();
     String getName();
     List<? extends Topic> getTopics();
+    List<? extends Comment> getComments();
 }

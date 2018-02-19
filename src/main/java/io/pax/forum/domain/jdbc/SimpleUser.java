@@ -1,5 +1,6 @@
 package io.pax.forum.domain.jdbc;
 
+import io.pax.forum.domain.Comment;
 import io.pax.forum.domain.Topic;
 import io.pax.forum.domain.User;
 
@@ -12,11 +13,17 @@ public class SimpleUser implements User {
     int id;
     String name;
     List<Topic> topics;
+    List<Comment> comments;
 
-    public SimpleUser(int userId, String userName, List<Topic> topics) {
-        this.id = id;
-        this.name = name;
+    public SimpleUser(int userId, String userName, List<Topic> topics, List<Comment> comments) {
+        this.id = userId;
+        this.name = userName;
         this.topics = topics;
+        this.comments = comments;
+
+    }
+
+    public SimpleUser() {
     }
 
     public SimpleUser(int id, String name) {
@@ -24,10 +31,13 @@ public class SimpleUser implements User {
         this.name = name;
     }
 
+    public SimpleUser(int userId, String userName, List<Comment> comments) {
+        this.id = userId;
+        this.name = userName;
 
-
-    public SimpleUser() {
+        this.comments = comments;
     }
+
 
     @Override
     public int getId() {
@@ -43,10 +53,15 @@ public class SimpleUser implements User {
     public String toString() {
         return this.name + " : " + this.topics;
     }
-    @Override
-    public List<Topic> getTopics(){return topics;}
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public List<Topic> getTopics() {
+        return topics;
     }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+
 }
