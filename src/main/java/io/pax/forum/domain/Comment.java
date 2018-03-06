@@ -8,8 +8,8 @@ public interface Comment {
     default User getUser(){
         return getUser();}
 
-    default Topic getTopic(){
-        return getTopic();}
+ /*   default Topic getTopic(){
+        return getTopic();}*/
 
     String getName();
 }

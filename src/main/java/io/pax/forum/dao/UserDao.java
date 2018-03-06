@@ -3,6 +3,7 @@ package io.pax.forum.dao;
 import io.pax.forum.domain.Comment;
 import io.pax.forum.domain.Topic;
 import io.pax.forum.domain.User;
+import io.pax.forum.domain.jdbc.SimpleComment;
 import io.pax.forum.domain.jdbc.SimpleTopic;
 import io.pax.forum.domain.jdbc.SimpleUser;
 
@@ -84,6 +85,11 @@ public class UserDao {
         System.out.println(user);
         return user;
     }
+
+
+
+
+
     public User findUserWithComment (int userId) throws SQLException {
 
         Connection connection = connector.getConnection();
@@ -92,17 +98,17 @@ public class UserDao {
         statement.setInt(1, userId);
         ResultSet set = statement.executeQuery();
         User user = null;
-        List<Topic> topics = new ArrayList<>();
+      //  List<Topic> topics = new ArrayList<>();
         List<Comment> comments = new ArrayList<>();
         while (set.next()) {
             String userName = set.getString("c.name");
             System.out.println("userName: " + userName);
             user = new SimpleUser(userId, userName,comments);
-            int topicId = set.getInt("t.id");
-            String topicName = set.getString("t.name");
-            if (topicId > 0) {
-                Topic topic = new SimpleTopic(topicId, topicName);
-                topics.add(topic);
+           int commentId = set.getInt("c.id");
+            String commentName = set.getString("c.name");
+            if (commentId > 0) {
+                Comment comment = new SimpleComment(commentId, commentName);
+                comments.add(comment);
             }
         }
         set.close();
@@ -112,9 +118,12 @@ public class UserDao {
     }
 
     public static void main(String[] args) throws SQLException {
-        System.out.println(new UserDao().findUserWithTopics(3));
+      //  System.out.println(new UserDao().findUserWithTopics(3));
         //UserDao dao = new UserDao();
        // System.out.println(dao.listUsers());
          //dao.createUser("juju");
+CommentDao dao = new CommentDao();
+dao.createComment(1,1,"Bonjour");
+        System.out.println(new UserDao().findUserWithComment(1));
     }
 }

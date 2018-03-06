@@ -40,15 +40,18 @@ public class CommentDao {
     }
 
 
-    public int createComment(int userId, int topicId, String name) throws SQLException {
-        String query = "INSERT INTO comment (name,user_id,topic_id) VALUES (?,?,?)";
+    //public int createComment(int userId, String name) throws SQLException {
+        public int createComment(int userId, int topicId, String name) throws SQLException {
+
+     String query = "INSERT INTO comment (name,user_id,topic_id) VALUES (?,?,?)";
+    //    String query = "INSERT INTO comment (name,user_id) VALUES (?,?)";
         System.out.println(query);
 
         Connection conn = this.connector.getConnection();
         PreparedStatement statements = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         statements.setString(1, name);
         statements.setInt(2, userId);
-        statements.setInt(3, topicId);
+      statements.setInt(3, topicId);
         statements.executeUpdate();
 
 
@@ -72,8 +75,10 @@ public class CommentDao {
     public static void main(String[] args) throws SQLException {
 
         CommentDao dao = new CommentDao();
-        dao.createComment(1, 3, "lololololol");
+        dao.createComment(1, 2, "lololololol");
+        System.out.println(dao);
     }
+
 
 
 }

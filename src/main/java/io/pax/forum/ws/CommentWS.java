@@ -2,6 +2,7 @@ package io.pax.forum.ws;
 
 import io.pax.forum.dao.CommentDao;
 
+
 import io.pax.forum.domain.Comment;
 import io.pax.forum.domain.Topic;
 import io.pax.forum.domain.User;
@@ -27,36 +28,70 @@ public class CommentWS {
         CommentDao dao = new CommentDao();
         return dao.listComments();
     }
-    @POST
+
+
+
 /*return future wallet with an id*/
-    public SimpleComment createComment(SimpleComment comment /* sent wallet has no id*/) {
+
+/**
+ * SimpleComment createComment(void)
+ * @return SimpleComment from scratch
+ */
+/**
+ public SimpleComment createComment() throws SQLException {
+ Boolean doNext = true;
+
+ if(!doNext) {
+ SimpleUser simpleUser = new SimpleUser(99, "Casper", null, null);
+ SimpleComment simpleComment = new SimpleComment(99, "Commentaire de test", simpleUser);
+ throw new NotAcceptableException("407: Le commentaire de : " + simpleUser.getName() + " est " + simpleComment.getName());
+ } else {
+ SimpleUser simpleUser = new SimpleUser(99, "Casper", null, null);
+ SimpleComment simpleComment = new SimpleComment(99, "Commentaire de test", simpleUser);
+ System.out.println("******** Retour de méthode createComment *************");
+ return simpleComment;
+ }
+ }
+ **/
 
 
-        User user = comment.getUser();
-        Topic topic = comment.getTopic();
+@POST
+//return future comment with an id
+public Comment createComment(SimpleComment comment) { //sent comment, has no id
+    Boolean doNext = false;
+    User user = comment.getUser();
+    Topic topic =  comment.getTopic();
 
-        if (user == null) {
-            throw new NotAcceptableException("406 no user id sent");
-        }
-        if (comment.getName().length() < 2) {
-            throw new NotAcceptableException("406 : wallet name must have at least 2 letters ");
+    if (user == null) {
+        //400x: navigator sent wrong informations
+        throw new NotAcceptableException("No user id sent");
 
-        }
+    }
+
+    if (topic == null) {
+        //400x: navigator sent wrong informations
+        throw new NotAcceptableException("No topic id sent");
+
+    }
+
+    if (comment.getName().length() < 5) {
+        throw new NotAcceptableException("406: Comment name must have at least 5 letters");
+    }
+
 
         try {
-
             int id = new CommentDao().createComment(user.getId(), topic.getId(), comment.getName());
-           User boundUser = comment.getUser();
-          Topic boundTopic = comment.getTopic();
 
+            User boundUser = comment.getUser();
+            Topic boundTopic = comment.getTopic();
             SimpleUser simpleUser = new SimpleUser(boundUser.getId(), boundUser.getName());
-            SimpleTopic simpleTopic = new SimpleTopic(boundTopic.getId(), boundTopic.getName(), simpleUser);
-
+            SimpleTopic simpleTopic = new SimpleTopic(boundTopic.getId(), boundTopic.getName());
 
             return new SimpleComment(id, comment.getName(), simpleUser, simpleTopic);
-        } catch (SQLException e) {
 
+        } catch (SQLException e) {
             throw new ServerErrorException("Database error, sorry", 500);
-        }
-    }
-    }
+          }
+
+}
+}
